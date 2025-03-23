@@ -170,12 +170,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_velocity: {x: 0, y: 0}
   m_force: {x: 0, y: 0}
+  m_position: {x: 0, y: 0}
   m_ang_velocity: 8
   m_torque: 0
   m_mass: 0
   m_inertia: 0
   m_restitution_coef: 0
   m_frame_skip: 3
+  m_is_static: 0
 --- !u!212 &186582877
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -291,12 +293,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_velocity: {x: 0, y: 0}
   m_force: {x: 0, y: 0}
+  m_position: {x: 0, y: 0}
   m_ang_velocity: 8
   m_torque: 0
   m_mass: 0
   m_inertia: 0
-  m_restitution_coef: 0
+  m_restitution_coef: 0.1
   m_frame_skip: 0
+  m_is_static: 0
 --- !u!212 &327915520
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -412,12 +416,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_velocity: {x: 0, y: 0}
   m_force: {x: 0, y: 0}
+  m_position: {x: 0, y: 0}
   m_ang_velocity: 8
   m_torque: 0
   m_mass: 0
   m_inertia: 0
   m_restitution_coef: 0
   m_frame_skip: 0
+  m_is_static: 0
 --- !u!212 &472989651
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -533,12 +539,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_velocity: {x: 0, y: 0}
   m_force: {x: 0, y: 0}
+  m_position: {x: 0, y: 0}
   m_ang_velocity: 8
   m_torque: 0
   m_mass: 0
   m_inertia: 0
   m_restitution_coef: 0
   m_frame_skip: 0
+  m_is_static: 0
 --- !u!212 &913125078
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -746,12 +754,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_velocity: {x: 0, y: 0}
   m_force: {x: 0, y: 0}
+  m_position: {x: 0, y: 0}
   m_ang_velocity: 8
   m_torque: 0
   m_mass: 0
   m_inertia: 0
-  m_restitution_coef: 0
+  m_restitution_coef: 0.5
   m_frame_skip: 0
+  m_is_static: 1
 --- !u!212 &1044326776
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -867,12 +877,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_velocity: {x: 0, y: 0}
   m_force: {x: 0, y: 0}
+  m_position: {x: 0, y: 0}
   m_ang_velocity: 8
   m_torque: 0
   m_mass: 0
   m_inertia: 0
   m_restitution_coef: 0
   m_frame_skip: 0
+  m_is_static: 0
 --- !u!212 &1232765112
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -950,6 +962,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1345432421}
   - component: {fileID: 1345432422}
+  - component: {fileID: 1345432423}
   m_Layer: 0
   m_Name: PhysicsManager
   m_TagString: Untagged
@@ -984,8 +997,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30839264b4c7c6843b4e797e86b40f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_use_gravity: 0
+  m_use_gravity: 1
   m_use_breaking_torque: 1
+--- !u!114 &1345432423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345432420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04680ec2aabc12f43bf4823e72b8a21a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1999026068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1034,12 +1059,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_velocity: {x: 0, y: 0}
   m_force: {x: 0, y: 0}
+  m_position: {x: 0, y: 0}
   m_ang_velocity: 8
   m_torque: 0
   m_mass: 0
   m_inertia: 0
   m_restitution_coef: 0
   m_frame_skip: 6
+  m_is_static: 0
 --- !u!212 &1999026071
 SpriteRenderer:
   m_ObjectHideFlags: 0

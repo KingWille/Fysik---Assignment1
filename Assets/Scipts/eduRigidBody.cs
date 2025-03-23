@@ -7,6 +7,7 @@ public class eduRigidBody : MonoBehaviour
 {
     public Vector2 m_velocity;
     public Vector2 m_force;
+    public Vector2 m_position;
 
     public float m_ang_velocity;
     public float m_torque;
@@ -17,7 +18,8 @@ public class eduRigidBody : MonoBehaviour
     public int m_frame_skip;
     int frame_skip_counter;
 
-    bool inertia_zero;
+    bool is_inertia_zero;
+    public bool m_is_static;
 
     readonly Vector3 rotation_axis = new Vector3(0, 0, 1);
 
@@ -29,6 +31,14 @@ public class eduRigidBody : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (m_is_static) //Om objected ska vara statiskt, skippas allting
+        {
+            m_position = transform.position;
+            m_force = Vector2.zero;
+            m_torque = 0;
+            return;
+        }
+
         //Skippar frames baserat på m_frame_skip
         if(frame_skip_counter < m_frame_skip)
         {
@@ -44,9 +54,9 @@ public class eduRigidBody : MonoBehaviour
         transform.position += (Vector3)(m_velocity * Time.fixedDeltaTime * Mathf.Max(1, m_frame_skip));
 
         //Beräknar vinkelhastigheten
-        transform.Rotate(rotation_axis, m_ang_velocity);
+        m_ang_velocity += m_torque * 1 / m_inertia * Time.fixedDeltaTime * Mathf.Max(1, m_frame_skip);
 
-        m_ang_velocity += m_torque * Mathf.Pow(m_inertia, -1) * Time.fixedDeltaTime * Mathf.Max(1, m_frame_skip);
+        transform.Rotate(rotation_axis, m_ang_velocity * Time.fixedDeltaTime * Mathf.Max(1, m_frame_skip));
 
         //Återställer variabler
         m_force = Vector2.zero;
@@ -62,11 +72,13 @@ public class eduRigidBody : MonoBehaviour
         }
 
         //För uppgift 1.4
-        if (m_ang_velocity <= 0 && !inertia_zero)
+        if (m_ang_velocity <= 0 && !is_inertia_zero)
         {
             Debug.Log(time_passed + " " + name);
-            inertia_zero = true;
+            is_inertia_zero = true;
         }
+
+        m_position = transform.position;
 
         //Variabel för tid som har passerat
         time_passed += Time.fixedDeltaTime * Mathf.Max(1, m_frame_skip);
@@ -84,6 +96,6 @@ public class eduRigidBody : MonoBehaviour
 
     public void ApplyImpulse(Vector2 j)
     {
-
+        m_velocity += j;
     }
 }
