@@ -36,6 +36,7 @@ public class eduRigidBody : MonoBehaviour
             m_position = transform.position;
             m_force = Vector2.zero;
             m_torque = 0;
+            m_velocity = Vector2.zero;
             return;
         }
 

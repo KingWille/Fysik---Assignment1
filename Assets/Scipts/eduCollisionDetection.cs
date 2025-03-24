@@ -83,18 +83,20 @@ public class eduCollisionDetection : MonoBehaviour
         rb2.ApplyImpulse(-(impulseMagnitude / rb2.m_mass) * collisionNormal);
 
         //Positions rättning
-        float ERP = 0.8f;
+        float ERP = 1f;
 
-        float penetration = (radius2 + radius1) - Vector2.Distance(obj1.transform.position, obj1.transform.position);
+        float penetration = (radius2 + radius1) - Vector2.Distance(obj1.transform.position, obj2.transform.position);
+
+        if (penetration > 0)
+        {
+            float P = ERP * massAverage * penetration;
+
+            Vector2 correction1 = rb1.m_is_static ? Vector3.zero : -P / rb1.m_mass * collisionNormal;
+            Vector2 correction2 = rb2.m_is_static ? Vector3.zero : P / rb2.m_mass * collisionNormal;
 
 
-        float P = ERP * massAverage * penetration;
-
-        Vector2 correction1 = rb1.m_is_static ? Vector3.zero : -P / rb1.m_mass * collisionNormal;
-        Vector2 correction2 = rb2.m_is_static ? Vector3.zero : P / rb2.m_mass * collisionNormal;
-
-
-        obj1.transform.position += (Vector3)correction1;
-        obj2.transform.position += (Vector3)correction2;
+            obj1.transform.position += (Vector3)correction1;
+            obj2.transform.position += (Vector3)correction2;
+        }
     }
 }
