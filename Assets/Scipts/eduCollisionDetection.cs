@@ -19,13 +19,12 @@ public class eduCollisionDetection : MonoBehaviour
     {
         CicleCircleCollision();
         CircleWallCollision();
-        CirclePlaneCollision();
     }
 
     private void Init()
     {
         circleColliders = GameObject.FindGameObjectsWithTag("Player");
-        //wallColliders = GameObject.FindGameObjectsWithTag("Wall");
+        wallColliders = GameObject.FindGameObjectsWithTag("Wall");
         //planeColliders = GameObject.FindGameObjectsWithTag("Plane");
     }
 
@@ -48,22 +47,85 @@ public class eduCollisionDetection : MonoBehaviour
                 radius2 = circleColliders[j].GetComponent<eduCircleCollider>().m_radius;
 
                 if (Vector2.Distance(c1.transform.position, c2.transform.position) <= radius1 + radius2)
-                    EvaluateCollision(c1, c2, radius1, radius2);
+                    EvaluateCollisionCircle(c1, c2, radius1, radius2);
             }
         }
     }
 
     private void CircleWallCollision()
     {
+        GameObject wall;
+        GameObject circle;
+        eduWallCollider collider;
+
+        float radius;
+        float thickness;
+        float distance;
+
+        for (int i = 0; i < circleColliders.Length; i++)
+        {
+            circle = circleColliders[i];
+            radius = circle.GetComponent<eduCircleCollider>().m_radius;
+
+            for(int j = 0; j < wallColliders.Length; j++)
+            {
+                wall = wallColliders[j];
+                thickness = Mathf.Min(wall.transform.lossyScale.x, wall.transform.lossyScale.y);
+                collider = wall.GetComponent<eduWallCollider>();
+
+                distance = collider.m_wall_type == eduWallCollider.WallType.Top || collider.m_wall_type == eduWallCollider.WallType.Bottom 
+                    ? Vector2.Distance(new Vector2(circle.transform.position.x, wall.transform.position.y), circle.transform.position) //jämför endast y positionen på cirkel och vägg
+                    : Vector2.Distance(new Vector2(wall.transform.position.x, circle.transform.position.y), circle.transform.position); //Jämför endast x position == " ==
+
+                if(distance <= radius + thickness) 
+                    EvaluateCollisionWall(wall, circle, radius, thickness, distance);
+            }
+        }
 
     }
 
-    private void CirclePlaneCollision()
+    private void EvaluateCollisionWall(GameObject wall, GameObject circle, float radius, float thickness, float minDistance)
     {
+        eduRigidBody rb1 = wall.GetComponent<eduRigidBody>();
+        eduRigidBody rb2 = circle.GetComponent<eduRigidBody>();
+        eduWallCollider collider = wall.GetComponent<eduWallCollider>();
 
+        //Impuls beräkning
+        Vector2 collisionNormal;
+
+        //Hämta hem korrekt normal för väggen
+        if (collider.m_wall_type == eduWallCollider.WallType.Top || collider.m_wall_type == eduWallCollider.WallType.Bottom)
+            collisionNormal = new Vector2(0, circle.transform.position.y - wall.transform.position.y);
+        else
+            collisionNormal = new Vector2(circle.transform.position.x - wall.transform.position.x, 0);
+
+        collisionNormal = collisionNormal.normalized;
+
+        float massAverage = rb1.m_mass * rb2.m_mass / (rb1.m_mass + rb2.m_mass);
+
+        float CAverage = (rb1.m_restitution_coef + rb2.m_restitution_coef) / 2;
+
+        float relVel = Vector2.Dot(rb2.m_velocity - rb1.m_velocity, collisionNormal);
+
+        float impulseMagnitude = massAverage * (1 + CAverage) * relVel;
+
+        rb2.ApplyImpulse(-(impulseMagnitude / rb2.m_mass) * collisionNormal);
+
+        //Positions rättning
+        float ERP = 1f;
+
+        float penetration = radius + thickness - minDistance;
+
+        if (penetration > 0)
+        {
+            float P = ERP * massAverage * penetration;
+
+            Vector2 correction = rb2.m_is_static ? Vector3.zero : P / rb2.m_mass * collisionNormal;
+
+            circle.transform.position += (Vector3)correction;
+        }
     }
-
-    private void EvaluateCollision(GameObject obj1, GameObject obj2, float radius1, float radius2)
+    private void EvaluateCollisionCircle(GameObject obj1, GameObject obj2, float radius1, float radius2)
     {
         eduRigidBody rb1 = obj1.GetComponent<eduRigidBody>();
         eduRigidBody rb2 = obj2.GetComponent<eduRigidBody>();
