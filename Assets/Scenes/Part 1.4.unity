@@ -1134,10 +1134,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30839264b4c7c6843b4e797e86b40f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wind_speed: 10
+  m_wind_speed: 0
+  m_fluid_density: 997
+  m_fluid_level: 0
   m_use_gravity: 1
   m_use_breaking_torque: 1
-  m_use_wind: 1
+  m_use_wind: 0
+  m_use_buoyancy: 1
 --- !u!114 &1345432423
 MonoBehaviour:
   m_ObjectHideFlags: 0
