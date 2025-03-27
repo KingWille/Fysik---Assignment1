@@ -14,6 +14,7 @@ public class eduRigidBody : MonoBehaviour
     public float m_mass;
     public float m_inertia;
     public float m_restitution_coef;
+    public float m_drag_coef;
 
     public int m_frame_skip;
     int frame_skip_counter;
